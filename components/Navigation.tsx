@@ -36,9 +36,9 @@ export default function Navigation() {
           <a href="/letter" className="font-mono text-xs font-bold text-black bg-[#fcd53f] px-2 py-1 uppercase border-2 border-black shadow-[2px_2px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
             FOR DAD
           </a>
-          <span className="hidden sm:inline-block font-mono text-xs font-bold text-black bg-white px-2 py-1 uppercase border-2 border-black shadow-[2px_2px_0_0_#000]">
+          <a href="/" className="hidden sm:inline-block font-mono text-xs font-bold text-black bg-white px-2 py-1 uppercase border-2 border-black shadow-[2px_2px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
             DAD_MODE_ACTIVE
-          </span>
+          </a>
         </div>
         
         <div className="flex items-center space-x-6">
