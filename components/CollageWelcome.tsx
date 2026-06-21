@@ -16,7 +16,6 @@ export default function CollageWelcome({ onEnter }: { onEnter: () => void }) {
       <div className="max-w-5xl w-full p-8 my-auto min-h-fit pt-12">
         <div className="text-center mb-16 neo-panel p-6 bg-white max-w-2xl mx-auto rotate-[-1deg]">
           <h1 className="text-5xl font-black text-black uppercase mb-2">Dad's Dashboard</h1>
-          <p className="text-black font-bold uppercase tracking-widest">System Initialization Sequence</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 relative">
