@@ -19,7 +19,7 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
   const [filter, setFilter] = useState("");
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskPriority, setNewTaskPriority] = useState<"LOW" | "MED" | "HIGH" | "VERY_HIGH">("LOW");
-  const [sortOrder, setSortOrder] = useState<"NONE" | "HIGH_FIRST" | "LOW_FIRST">("NONE");
+  const [sortOrder, setSortOrder] = useState<"HIGH_FIRST" | "LOW_FIRST" | "DATE">("HIGH_FIRST");
 
   useEffect(() => {
     fetchTasks();
@@ -95,7 +95,8 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
     .sort((a, b) => {
       if (sortOrder === "HIGH_FIRST") return priorityWeights[b.priority] - priorityWeights[a.priority];
       if (sortOrder === "LOW_FIRST") return priorityWeights[a.priority] - priorityWeights[b.priority];
-      return 0;
+      // sortOrder === "DATE"
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
 
   const priorityColors = {
@@ -146,9 +147,9 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
 
       {/* Sort Controls */}
       <div className="flex gap-2 mb-4">
-        <button onClick={() => setSortOrder("NONE")} className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0_0_#000] ${sortOrder === "NONE" ? "bg-black text-white" : "bg-white text-black"}`}>DEFAULT</button>
-        <button onClick={() => setSortOrder("HIGH_FIRST")} className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0_0_#000] ${sortOrder === "HIGH_FIRST" ? "bg-black text-white" : "bg-white text-black"}`}>HIGH PRIORITY FIRST</button>
-        <button onClick={() => setSortOrder("LOW_FIRST")} className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0_0_#000] ${sortOrder === "LOW_FIRST" ? "bg-black text-white" : "bg-white text-black"}`}>LOW PRIORITY FIRST</button>
+        <button onClick={() => setSortOrder("HIGH_FIRST")} className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0_0_#000] ${sortOrder === "HIGH_FIRST" ? "bg-black text-white" : "bg-white text-black"}`}>VERY HIGH ➔ LOW</button>
+        <button onClick={() => setSortOrder("LOW_FIRST")} className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0_0_#000] ${sortOrder === "LOW_FIRST" ? "bg-black text-white" : "bg-white text-black"}`}>LOW ➔ VERY HIGH</button>
+        <button onClick={() => setSortOrder("DATE")} className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0_0_#000] ${sortOrder === "DATE" ? "bg-black text-white" : "bg-white text-black"}`}>NEWEST FIRST</button>
       </div>
 
       {/* Grid */}

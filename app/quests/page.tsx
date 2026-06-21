@@ -1,6 +1,8 @@
 import Navigation from "@/components/Navigation";
 import DadLevelCard from "@/components/DadLevelCard";
 import GamifiedTimetable from "@/components/GamifiedTimetable";
+import MiniGame from "@/components/MiniGame";
+import HabitTracker from "@/components/HabitTracker";
 
 export default function QuestsPage() {
   return (
@@ -14,7 +16,16 @@ export default function QuestsPage() {
         </div>
 
         <DadLevelCard />
-        <GamifiedTimetable />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <GamifiedTimetable />
+          </div>
+          <div className="space-y-8">
+            <MiniGame />
+            <HabitTracker />
+          </div>
+        </div>
       </div>
     </main>
   );

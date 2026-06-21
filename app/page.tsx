@@ -28,9 +28,6 @@ export default function Home() {
           <MetricsBar {...metrics} />
           
           <TaskGrid onMetricsChange={setMetrics} />
-
-          <MiniGame />
-          <HabitTracker />
         </div>
       </div>
     </main>
