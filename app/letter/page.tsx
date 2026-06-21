@@ -49,7 +49,7 @@ export default function LetterPage() {
               Happy Father's Day!
             </p>
             <p className="text-xl font-bold mt-2">
-              Love, your favorite kid, Rohan.
+              Love, Rohan
             </p>
           </div>
         </div>
