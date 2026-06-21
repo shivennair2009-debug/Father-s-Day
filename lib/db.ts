@@ -28,6 +28,15 @@ db.exec(`
   )
 `);
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS links (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    url TEXT NOT NULL,
+    color TEXT DEFAULT 'bg-white'
+  )
+`);
+
 // Initialize dad stats if not exists
 const statCheck = db.prepare("SELECT * FROM stats WHERE id = 'dad'").get();
 if (!statCheck) {
