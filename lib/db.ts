@@ -1,8 +1,13 @@
 import { Pool } from 'pg';
 
 // Initialize pool using the connection string from Supabase
+let connectionString = process.env.POSTGRES_URL || '';
+if (connectionString.includes('?')) {
+  connectionString = connectionString.split('?')[0];
+}
+
 const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
+  connectionString,
   ssl: {
     rejectUnauthorized: false
   }
