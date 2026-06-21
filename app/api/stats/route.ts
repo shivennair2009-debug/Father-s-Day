@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
-import { sql } from '@vercel/postgres';
-import { initDB } from '@/lib/db';
+import { initDB, query } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
     await initDB();
-    const { rows } = await sql`SELECT * FROM stats WHERE id = 'dad'`;
+    const { rows } = await query(`SELECT * FROM stats WHERE id = 'dad'`);
     if (rows.length === 0) {
       return NextResponse.json({ total_xp: 0, current_level: 1 });
     }

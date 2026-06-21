@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
-import { sql } from '@vercel/postgres';
+import { query } from '@/lib/db';
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    
-    const result = await sql`DELETE FROM links WHERE id = ${id}`;
+    const result = await query(`DELETE FROM links WHERE id = $1`, [id]);
     
     if (result.rowCount === 0) {
       return NextResponse.json({ error: 'Link not found' }, { status: 404 });

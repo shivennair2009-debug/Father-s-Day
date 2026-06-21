@@ -1,8 +1,18 @@
-import { sql } from '@vercel/postgres';
+import { Pool } from 'pg';
+
+// Initialize pool using the connection string from Supabase
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+export const query = (text: string, params?: any[]) => pool.query(text, params);
 
 export async function initDB() {
   try {
-    await sql`
+    await query(`
       CREATE TABLE IF NOT EXISTS tasks (
         id VARCHAR(255) PRIMARY KEY,
         title TEXT NOT NULL,
@@ -15,34 +25,31 @@ export async function initDB() {
         difficulty VARCHAR(50) DEFAULT 'EASY',
         scheduled_time VARCHAR(50)
       );
-    `;
+    `);
 
-    await sql`
+    await query(`
       CREATE TABLE IF NOT EXISTS stats (
         id VARCHAR(255) PRIMARY KEY,
         total_xp INTEGER DEFAULT 0,
         current_level INTEGER DEFAULT 1
       );
-    `;
+    `);
 
-    await sql`
+    await query(`
       CREATE TABLE IF NOT EXISTS links (
         id VARCHAR(255) PRIMARY KEY,
         title TEXT NOT NULL,
         url TEXT NOT NULL,
         color VARCHAR(50) DEFAULT 'bg-white'
       );
-    `;
+    `);
 
     // Initialize dad stats if not exists
-    const statCheck = await sql`SELECT * FROM stats WHERE id = 'dad'`;
+    const statCheck = await query(`SELECT * FROM stats WHERE id = 'dad'`);
     if (statCheck.rowCount === 0) {
-      await sql`INSERT INTO stats (id, total_xp, current_level) VALUES ('dad', 0, 1)`;
+      await query(`INSERT INTO stats (id, total_xp, current_level) VALUES ('dad', 0, 1)`);
     }
   } catch (error) {
     console.error("Database initialization failed", error);
   }
 }
-
-// We don't export a synchronous 'db' object anymore. 
-// API routes will import 'sql' directly from '@vercel/postgres' and use async queries.
