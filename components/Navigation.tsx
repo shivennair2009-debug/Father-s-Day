@@ -23,10 +23,13 @@ export default function Navigation() {
           <div className="bg-black text-white p-1 border-2 border-black">
             <Terminal size={20} strokeWidth={3} />
           </div>
-          <span className="font-bold text-xl tracking-tight text-black uppercase">
+          <a href="/" className="font-bold text-xl tracking-tight text-black uppercase hover:underline">
             Dad's HQ
-          </span>
-          <span className="font-mono text-xs font-bold text-black bg-white px-2 py-1 uppercase border-2 border-black shadow-[2px_2px_0_0_#000]">
+          </a>
+          <a href="/quests" className="font-mono text-xs font-bold text-black bg-[#ff499e] px-2 py-1 uppercase border-2 border-black shadow-[2px_2px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+            QUESTS & XP
+          </a>
+          <span className="hidden sm:inline-block font-mono text-xs font-bold text-black bg-white px-2 py-1 uppercase border-2 border-black shadow-[2px_2px_0_0_#000]">
             DAD_MODE_ACTIVE
           </span>
         </div>

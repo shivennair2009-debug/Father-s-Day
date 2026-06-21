@@ -15,15 +15,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { title, priority, category } = await request.json();
+    const { title, priority, category, type = 'ONE_OFF', difficulty = 'EASY', scheduled_time = null } = await request.json();
     const id = uuidv4();
     
-    const stmt = db.prepare(`
-      INSERT INTO tasks (id, title, priority, category, status)
-      VALUES (?, ?, ?, ?, 'PENDING')
-    `);
-    
-    stmt.run(id, title, priority || 'LOW', category || 'General');
+    const stmt = db.prepare('INSERT INTO tasks (id, title, priority, category, type, difficulty, scheduled_time) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    stmt.run(id, title, priority, category, type, difficulty, scheduled_time);
     
     const newTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
     return NextResponse.json(newTask, { status: 201 });

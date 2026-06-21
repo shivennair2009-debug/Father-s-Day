@@ -6,6 +6,7 @@ import Navigation from "@/components/Navigation";
 import MetricsBar from "@/components/MetricsBar";
 import TaskGrid from "@/components/TaskGrid";
 import HabitTracker from "@/components/HabitTracker";
+import MiniGame from "@/components/MiniGame";
 
 export default function Home() {
   const [entered, setEntered] = useState(false);
@@ -28,6 +29,7 @@ export default function Home() {
           
           <TaskGrid onMetricsChange={setMetrics} />
 
+          <MiniGame />
           <HabitTracker />
         </div>
       </div>

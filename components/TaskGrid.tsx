@@ -19,6 +19,7 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
   const [filter, setFilter] = useState("");
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskPriority, setNewTaskPriority] = useState<"LOW" | "MED" | "HIGH">("LOW");
+  const [sortOrder, setSortOrder] = useState<"NONE" | "HIGH_FIRST" | "LOW_FIRST">("NONE");
 
   useEffect(() => {
     fetchTasks();
@@ -78,7 +79,15 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
     }
   };
 
-  const filteredTasks = tasks.filter(t => t.title.toLowerCase().includes(filter.toLowerCase()));
+  const priorityWeights = { HIGH: 3, MED: 2, LOW: 1 };
+  
+  const filteredTasks = tasks
+    .filter(t => t.title.toLowerCase().includes(filter.toLowerCase()))
+    .sort((a, b) => {
+      if (sortOrder === "HIGH_FIRST") return priorityWeights[b.priority] - priorityWeights[a.priority];
+      if (sortOrder === "LOW_FIRST") return priorityWeights[a.priority] - priorityWeights[b.priority];
+      return 0;
+    });
 
   const priorityColors = {
     HIGH: "bg-[#ff499e]",
@@ -122,6 +131,13 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
             ADD TASK
           </button>
         </form>
+      </div>
+
+      {/* Sort Controls */}
+      <div className="flex gap-2 mb-4">
+        <button onClick={() => setSortOrder("NONE")} className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0_0_#000] ${sortOrder === "NONE" ? "bg-black text-white" : "bg-white text-black"}`}>DEFAULT</button>
+        <button onClick={() => setSortOrder("HIGH_FIRST")} className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0_0_#000] ${sortOrder === "HIGH_FIRST" ? "bg-black text-white" : "bg-white text-black"}`}>HIGH PRIORITY FIRST</button>
+        <button onClick={() => setSortOrder("LOW_FIRST")} className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0_0_#000] ${sortOrder === "LOW_FIRST" ? "bg-black text-white" : "bg-white text-black"}`}>LOW PRIORITY FIRST</button>
       </div>
 
       {/* Grid */}
