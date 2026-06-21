@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export type Task = {
   id: string;
   title: string;
-  priority: "LOW" | "MED" | "HIGH";
+  priority: "LOW" | "MED" | "HIGH" | "VERY_HIGH";
   category: string;
   status: "PENDING" | "COMPLETED";
   created_at: string;
@@ -18,7 +18,7 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState("");
   const [newTaskTitle, setNewTaskTitle] = useState("");
-  const [newTaskPriority, setNewTaskPriority] = useState<"LOW" | "MED" | "HIGH">("LOW");
+  const [newTaskPriority, setNewTaskPriority] = useState<"LOW" | "MED" | "HIGH" | "VERY_HIGH">("LOW");
   const [sortOrder, setSortOrder] = useState<"NONE" | "HIGH_FIRST" | "LOW_FIRST">("NONE");
 
   useEffect(() => {
@@ -56,6 +56,15 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
     });
   };
 
+  const changePriority = async (id: string, newPriority: "LOW" | "MED" | "HIGH" | "VERY_HIGH") => {
+    setTasks(tasks.map(t => t.id === id ? { ...t, priority: newPriority } : t));
+    await fetch(`/api/tasks/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ priority: newPriority })
+    });
+  };
+
   const deleteTask = async (id: string) => {
     setTasks(tasks.filter(t => t.id !== id));
     await fetch(`/api/tasks/${id}`, { method: "DELETE" });
@@ -79,7 +88,7 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
     }
   };
 
-  const priorityWeights = { HIGH: 3, MED: 2, LOW: 1 };
+  const priorityWeights = { VERY_HIGH: 4, HIGH: 3, MED: 2, LOW: 1 };
   
   const filteredTasks = tasks
     .filter(t => t.title.toLowerCase().includes(filter.toLowerCase()))
@@ -90,6 +99,7 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
     });
 
   const priorityColors = {
+    VERY_HIGH: "bg-[#9b51e0] text-white",
     HIGH: "bg-[#ff499e]",
     MED: "bg-[#fcd53f]",
     LOW: "bg-[#2fe6de]"
@@ -119,6 +129,7 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
             <option value="LOW">LOW PRIORITY</option>
             <option value="MED">MED PRIORITY</option>
             <option value="HIGH">HIGH PRIORITY</option>
+            <option value="VERY_HIGH">VERY HIGH PRIORITY</option>
           </select>
           <input
             type="text"
@@ -164,9 +175,16 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
                 </span>
               </div>
 
-              <div className={`px-3 py-1 border-2 border-black font-bold text-xs shadow-[2px_2px_0_0_#000] ${priorityColors[task.priority]}`}>
-                {task.priority}
-              </div>
+              <select
+                value={task.priority}
+                onChange={(e) => changePriority(task.id, e.target.value as any)}
+                className={`px-3 py-1 border-2 border-black font-bold text-xs shadow-[2px_2px_0_0_#000] cursor-pointer outline-none ${priorityColors[task.priority]}`}
+              >
+                <option value="LOW">LOW</option>
+                <option value="MED">MED</option>
+                <option value="HIGH">HIGH</option>
+                <option value="VERY_HIGH">VERY HIGH</option>
+              </select>
 
               <button 
                 onClick={() => deleteTask(task.id)}

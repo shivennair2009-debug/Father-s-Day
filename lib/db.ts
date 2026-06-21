@@ -9,7 +9,7 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS tasks (
     id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
-    priority TEXT CHECK( priority IN ('LOW', 'MED', 'HIGH') ) NOT NULL,
+    priority TEXT CHECK( priority IN ('LOW', 'MED', 'HIGH', 'VERY_HIGH') ) NOT NULL,
     category TEXT,
     status TEXT CHECK( status IN ('PENDING', 'COMPLETED') ) NOT NULL DEFAULT 'PENDING',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
