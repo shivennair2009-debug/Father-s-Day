@@ -1,12 +1,13 @@
 import { Pool } from 'pg';
 
-// Initialize pool using individual variables to avoid connection string parsing issues
+// Initialize pool securely by parsing the URL manually to avoid SSL parameter overrides
+const dbUrl = new URL(process.env.POSTGRES_URL || 'postgres://localhost:5432/postgres');
 const pool = new Pool({
-  host: process.env.POSTGRES_HOST,
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DATABASE,
-  port: 5432, // Non-pooling port
+  host: dbUrl.hostname,
+  port: parseInt(dbUrl.port || '5432'),
+  user: dbUrl.username,
+  password: dbUrl.password,
+  database: dbUrl.pathname.slice(1),
   ssl: {
     rejectUnauthorized: false
   }
