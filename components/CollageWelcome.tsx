@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 
 export default function CollageWelcome({ onEnter }: { onEnter: () => void }) {
   const images = [
-    { src: "/images/placeholder-1.jpg", caption: "BEST DAD", alt: "Dad 1", rotate: -2, color: "#fcd53f" },
-    { src: "/images/placeholder-2.jpg", caption: "BEST HUSBAND", alt: "Dad 2", rotate: 3, color: "#2fe6de" },
+    { src: "/images/placeholder-2.jpg", caption: "BEST DAD", alt: "Dad 1", rotate: -2, color: "#fcd53f" },
+    { src: "/images/placeholder-1.jpg", caption: "BEST HUSBAND", alt: "Dad 2", rotate: 3, color: "#2fe6de" },
     { src: "/images/placeholder-3.jpg", caption: "THE GOAT", alt: "Dad 3", rotate: -1, color: "#ff499e" },
     { src: "/images/placeholder-4.jpg", caption: "MY OG", alt: "Dad 4", rotate: 2, color: "#9b51e0" },
     { src: "/images/placeholder-5.jpg", caption: "LEGEND", alt: "Dad 5", rotate: -3, color: "#ffffff" },

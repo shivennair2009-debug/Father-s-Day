@@ -108,7 +108,7 @@ export default function GamifiedTimetable() {
               <option value="MEDIUM">MED (+25 XP)</option>
               <option value="HARD">HARD (+50 XP)</option>
             </select>
-            <button type="submit" className="neo-button px-8 py-3 flex-shrink-0">
+            <button type="submit" className="neo-button px-4 sm:px-6 py-3 w-full sm:w-auto shrink">
               ADD QUEST
             </button>
           </div>
