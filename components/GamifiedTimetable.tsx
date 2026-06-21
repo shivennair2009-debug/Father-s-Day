@@ -79,37 +79,39 @@ export default function GamifiedTimetable() {
   return (
     <div className="w-full">
       {/* Quest Giver Form */}
-      <div className="neo-panel bg-white p-6 mb-8">
+      <div className="neo-panel bg-white p-6 mb-8 overflow-hidden">
         <h3 className="font-black text-xl uppercase mb-4 flex items-center gap-2">
           <Swords size={24} />
           Assign New Quest
         </h3>
-        <form onSubmit={addTask} className="flex flex-col md:flex-row gap-4">
+        <form onSubmit={addTask} className="flex flex-col gap-4">
           <input
             type="text"
             placeholder="QUEST OBJECTIVE..."
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
-            className="neo-input px-4 py-3 font-bold flex-1"
+            className="neo-input px-4 py-3 font-bold w-full"
           />
-          <input
-            type="time"
-            value={newTime}
-            onChange={(e) => setNewTime(e.target.value)}
-            className="neo-input px-4 py-3 font-bold cursor-pointer"
-          />
-          <select 
-            value={newTaskDiff} 
-            onChange={(e) => setNewTaskDiff(e.target.value as any)}
-            className="neo-input px-4 py-3 font-bold cursor-pointer bg-gray-50"
-          >
-            <option value="EASY">EASY (+10 XP)</option>
-            <option value="MEDIUM">MED (+25 XP)</option>
-            <option value="HARD">HARD (+50 XP)</option>
-          </select>
-          <button type="submit" className="neo-button px-8 py-3">
-            ADD QUEST
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <input
+              type="time"
+              value={newTime}
+              onChange={(e) => setNewTime(e.target.value)}
+              className="neo-input px-4 py-3 font-bold cursor-pointer flex-1"
+            />
+            <select 
+              value={newTaskDiff} 
+              onChange={(e) => setNewTaskDiff(e.target.value as any)}
+              className="neo-input px-4 py-3 font-bold cursor-pointer bg-gray-50 flex-1 truncate"
+            >
+              <option value="EASY">EASY (+10 XP)</option>
+              <option value="MEDIUM">MED (+25 XP)</option>
+              <option value="HARD">HARD (+50 XP)</option>
+            </select>
+            <button type="submit" className="neo-button px-8 py-3 flex-shrink-0">
+              ADD QUEST
+            </button>
+          </div>
         </form>
       </div>
 
