@@ -2,6 +2,7 @@
 
 import { Terminal } from "lucide-react";
 import { useEffect, useState } from "react";
+import ProfileSidebar from "./ProfileSidebar";
 
 export default function Navigation() {
   const [time, setTime] = useState("");
@@ -41,12 +42,13 @@ export default function Navigation() {
         </div>
         
         <div className="flex items-center space-x-6">
-          <div className="flex items-center space-x-2 bg-white px-3 py-1 border-2 border-black shadow-[2px_2px_0_0_#000]">
+          <div className="flex items-center space-x-2 bg-white px-3 py-1 border-2 border-black shadow-[2px_2px_0_0_#000] hidden sm:flex">
             <div className="w-3 h-3 bg-[#2fe6de] border-2 border-black" />
             <span className="font-bold text-xs text-black uppercase tracking-wider">
               ONLINE
             </span>
           </div>
+          <ProfileSidebar />
         </div>
       </div>
     </nav>
