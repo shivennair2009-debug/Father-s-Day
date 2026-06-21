@@ -31,8 +31,7 @@ export default function CollageWelcome({ onEnter }: { onEnter: () => void }) {
               }`}
             >
               <div className="absolute inset-0 bg-[#111] flex items-center justify-center text-[var(--color-text-faded)] font-mono text-sm border border-[#222]">
-                {/* Fallback box if image is missing */}
-                <span className="opacity-50">[ IMAGE_NODE_{i + 1} ]</span>
+                <img src={img.src} alt={img.alt} className="absolute inset-0 w-full h-full object-cover z-0 opacity-80 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 z-10" />
               <div className="absolute bottom-0 left-0 w-full p-4 z-20 translate-y-2 group-hover:translate-y-0 transition-transform">
