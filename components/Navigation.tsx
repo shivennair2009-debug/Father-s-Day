@@ -29,6 +29,9 @@ export default function Navigation() {
           <a href="/quests" className="font-mono text-xs font-bold text-black bg-[#ff499e] px-2 py-1 uppercase border-2 border-black shadow-[2px_2px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
             QUESTS & XP
           </a>
+          <a href="/watchlist" className="font-mono text-xs font-bold text-black bg-[#2fe6de] px-2 py-1 uppercase border-2 border-black shadow-[2px_2px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+            WATCHLIST
+          </a>
           <a href="/letter" className="font-mono text-xs font-bold text-black bg-[#fcd53f] px-2 py-1 uppercase border-2 border-black shadow-[2px_2px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
             FOR DAD
           </a>

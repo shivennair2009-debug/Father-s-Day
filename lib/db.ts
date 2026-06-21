@@ -49,6 +49,19 @@ export async function initDB() {
       );
     `);
 
+    await query(`
+      CREATE TABLE IF NOT EXISTS watchlist (
+        id VARCHAR(255) PRIMARY KEY,
+        title TEXT NOT NULL,
+        type VARCHAR(50) NOT NULL,
+        platform VARCHAR(50),
+        status VARCHAR(50) DEFAULT 'PENDING',
+        rating INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        completed_at TIMESTAMP
+      );
+    `);
+
     // Initialize dad stats if not exists
     const statCheck = await query(`SELECT * FROM stats WHERE id = 'dad'`);
     if (statCheck.rowCount === 0) {

@@ -17,31 +17,28 @@ export default function StandupGenerator() {
       if (!res.ok) throw new Error("Failed to fetch tasks");
       const tasks: Task[] = await res.json();
 
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
       
       const completed = tasks.filter(t => 
         t.status === 'COMPLETED' && 
         t.completed_at && 
-        new Date(t.completed_at) > yesterday
+        new Date(t.completed_at) > today
       );
       
-      const priorityPending = tasks.filter(t => 
-        t.status === 'PENDING' && 
-        (t.priority === 'VERY_HIGH' || t.priority === 'HIGH')
-      );
+      const pending = tasks.filter(t => t.status === 'PENDING');
 
-      let text = "🚀 *Daily Standup Update* 🚀\n\n";
+      let text = "🌙 *Dayend Analysis* 🌙\n\n";
       
-      text += "*Completed Yesterday:*\n";
-      if (completed.length === 0) text += "- (No tasks marked completed yesterday)\n";
+      text += "*What Was Covered Today:* \n";
+      if (completed.length === 0) text += "- (No tasks logged as completed today)\n";
       completed.forEach(t => { text += `- ✅ ${t.title}\n`; });
 
-      text += "\n*Priorities for Today:*\n";
-      if (priorityPending.length === 0) text += "- (No high priority tasks queued)\n";
-      priorityPending.forEach(t => { text += `- 🎯 [${t.priority}] ${t.title}\n`; });
+      text += "\n*What Needs to be Worked On:* \n";
+      if (pending.length === 0) text += "- (All caught up! Excellent work)\n";
+      pending.forEach(t => { text += `- 🎯 [${t.priority}] ${t.title}\n`; });
 
-      text += "\n*Blockers:*\n- None at the moment!";
+      text += "\n*Notes / Blockers:* \n- None at the moment! Ready for tomorrow.";
 
       setReport(text);
     } catch (e) {
@@ -63,14 +60,14 @@ export default function StandupGenerator() {
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-black text-xl uppercase flex items-center gap-2">
           <FileText size={24} strokeWidth={3} className="text-[#9b51e0]" />
-          Standup Generator
+          Dayend Analysis
         </h3>
         <button 
           onClick={generateReport}
           className="neo-button px-4 py-2 text-sm bg-[#9b51e0] text-white hover:bg-black"
           disabled={loading}
         >
-          {loading ? "GENERATING..." : "GENERATE REPORT"}
+          {loading ? "GENERATING..." : "GENERATE ANALYSIS"}
         </button>
       </div>
 
