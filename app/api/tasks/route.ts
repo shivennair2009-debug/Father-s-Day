@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server';
-import db from '@/lib/db';
+import { sql } from '@vercel/postgres';
 import { v4 as uuidv4 } from 'uuid';
+import { initDB } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const tasks = db.prepare('SELECT * FROM tasks ORDER BY created_at DESC').all();
-    return NextResponse.json(tasks);
+    await initDB(); // Ensure tables exist
+    const { rows } = await sql`SELECT * FROM tasks ORDER BY created_at DESC`;
+    return NextResponse.json(rows);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch tasks' }, { status: 500 });
   }
@@ -15,14 +17,17 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    await initDB();
     const { title, priority, category, type = 'ONE_OFF', difficulty = 'EASY', scheduled_time = null } = await request.json();
     const id = uuidv4();
     
-    const stmt = db.prepare('INSERT INTO tasks (id, title, priority, category, type, difficulty, scheduled_time) VALUES (?, ?, ?, ?, ?, ?, ?)');
-    stmt.run(id, title, priority, category, type, difficulty, scheduled_time);
+    await sql`
+      INSERT INTO tasks (id, title, priority, category, status, type, difficulty, scheduled_time) 
+      VALUES (${id}, ${title}, ${priority}, ${category}, 'PENDING', ${type}, ${difficulty}, ${scheduled_time})
+    `;
     
-    const newTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
-    return NextResponse.json(newTask, { status: 201 });
+    const { rows } = await sql`SELECT * FROM tasks WHERE id = ${id}`;
+    return NextResponse.json(rows[0], { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to create task' }, { status: 500 });
   }

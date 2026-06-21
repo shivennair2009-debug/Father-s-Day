@@ -1,51 +1,48 @@
-import Database from 'better-sqlite3';
-import path from 'path';
+import { sql } from '@vercel/postgres';
 
-const dbPath = path.resolve(process.cwd(), 'novax.db');
-const db = new Database(dbPath);
+export async function initDB() {
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS tasks (
+        id VARCHAR(255) PRIMARY KEY,
+        title TEXT NOT NULL,
+        priority VARCHAR(50) NOT NULL,
+        category VARCHAR(50),
+        status VARCHAR(50) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        completed_at TIMESTAMP,
+        type VARCHAR(50) DEFAULT 'ONE_OFF',
+        difficulty VARCHAR(50) DEFAULT 'EASY',
+        scheduled_time VARCHAR(50)
+      );
+    `;
 
-// Initialize schema
-db.exec(`
-  CREATE TABLE IF NOT EXISTS tasks (
-    id TEXT PRIMARY KEY,
-    title TEXT NOT NULL,
-    priority TEXT CHECK( priority IN ('LOW', 'MED', 'HIGH', 'VERY_HIGH') ) NOT NULL,
-    category TEXT,
-    status TEXT CHECK( status IN ('PENDING', 'COMPLETED') ) NOT NULL DEFAULT 'PENDING',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    completed_at DATETIME,
-    type TEXT DEFAULT 'ONE_OFF',
-    difficulty TEXT DEFAULT 'EASY',
-    scheduled_time TEXT
-  )
-`);
+    await sql`
+      CREATE TABLE IF NOT EXISTS stats (
+        id VARCHAR(255) PRIMARY KEY,
+        total_xp INTEGER DEFAULT 0,
+        current_level INTEGER DEFAULT 1
+      );
+    `;
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS stats (
-    id TEXT PRIMARY KEY,
-    total_xp INTEGER DEFAULT 0,
-    current_level INTEGER DEFAULT 1
-  )
-`);
+    await sql`
+      CREATE TABLE IF NOT EXISTS links (
+        id VARCHAR(255) PRIMARY KEY,
+        title TEXT NOT NULL,
+        url TEXT NOT NULL,
+        color VARCHAR(50) DEFAULT 'bg-white'
+      );
+    `;
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS links (
-    id TEXT PRIMARY KEY,
-    title TEXT NOT NULL,
-    url TEXT NOT NULL,
-    color TEXT DEFAULT 'bg-white'
-  )
-`);
-
-// Initialize dad stats if not exists
-const statCheck = db.prepare("SELECT * FROM stats WHERE id = 'dad'").get();
-if (!statCheck) {
-  db.prepare("INSERT INTO stats (id, total_xp, current_level) VALUES ('dad', 0, 1)").run();
+    // Initialize dad stats if not exists
+    const statCheck = await sql`SELECT * FROM stats WHERE id = 'dad'`;
+    if (statCheck.rowCount === 0) {
+      await sql`INSERT INTO stats (id, total_xp, current_level) VALUES ('dad', 0, 1)`;
+    }
+  } catch (error) {
+    console.error("Database initialization failed", error);
+  }
 }
 
-try { db.exec("ALTER TABLE tasks ADD COLUMN type TEXT DEFAULT 'ONE_OFF'"); } catch (e) {}
-try { db.exec("ALTER TABLE tasks ADD COLUMN difficulty TEXT DEFAULT 'EASY'"); } catch (e) {}
-try { db.exec("ALTER TABLE tasks ADD COLUMN scheduled_time TEXT"); } catch (e) {}
-try { db.exec("ALTER TABLE tasks ADD COLUMN completed_at DATETIME"); } catch (e) {}
-
-export default db;
+// We don't export a synchronous 'db' object anymore. 
+// API routes will import 'sql' directly from '@vercel/postgres' and use async queries.

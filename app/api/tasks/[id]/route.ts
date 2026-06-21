@@ -1,38 +1,41 @@
 import { NextResponse } from 'next/server';
-import db from '@/lib/db';
+import { sql } from '@vercel/postgres';
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const { status, priority } = await request.json();
+    const { status } = await request.json();
     
     // Get existing task to check difficulty
-    const existing = db.prepare('SELECT status, difficulty FROM tasks WHERE id = ?').get(id) as any;
-    if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    const { rows: existingRows } = await sql`SELECT status, difficulty FROM tasks WHERE id = ${id}`;
+    const existing = existingRows[0];
+    
+    if (!existing) return NextResponse.json({ error: 'Task not found' }, { status: 404 });
 
-    if (priority) {
-      db.prepare('UPDATE tasks SET priority = ? WHERE id = ?').run(priority, id);
-    }
+    const completedAt = status === 'COMPLETED' ? new Date().toISOString() : null;
+    
+    await sql`
+      UPDATE tasks 
+      SET status = ${status}, completed_at = ${completedAt} 
+      WHERE id = ${id}
+    `;
 
-    if (status) {
-      const completedAt = status === 'COMPLETED' ? new Date().toISOString() : null;
-      const stmt = db.prepare('UPDATE tasks SET status = ?, completed_at = ? WHERE id = ?');
-      stmt.run(status, completedAt, id);
+    // Award XP if changing to COMPLETED
+    if (status === 'COMPLETED' && existing.status !== 'COMPLETED') {
+      let xpAward = 10;
+      if (existing.difficulty === 'MED') xpAward = 25;
+      if (existing.difficulty === 'HIGH') xpAward = 50;
 
-      // Award XP if changing from PENDING to COMPLETED
-      if (existing.status === 'PENDING' && status === 'COMPLETED') {
-        const xpReward = existing.difficulty === 'HARD' ? 50 : existing.difficulty === 'MEDIUM' ? 25 : 10;
-        
-        const stats = db.prepare("SELECT * FROM stats WHERE id = 'dad'").get() as any;
-        const newXp = stats.total_xp + xpReward;
-        const newLevel = Math.floor(newXp / 100) + 1;
-        
-        db.prepare("UPDATE stats SET total_xp = ?, current_level = ? WHERE id = 'dad'").run(newXp, newLevel);
-      }
+      await sql`
+        UPDATE stats 
+        SET total_xp = total_xp + ${xpAward},
+            current_level = (total_xp + ${xpAward}) / 100 + 1
+        WHERE id = 'dad'
+      `;
     }
     
-    const updatedTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
-    return NextResponse.json(updatedTask);
+    const { rows: updatedRows } = await sql`SELECT * FROM tasks WHERE id = ${id}`;
+    return NextResponse.json(updatedRows[0]);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to update task' }, { status: 500 });
   }
@@ -42,10 +45,9 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
   try {
     const { id } = await params;
     
-    const stmt = db.prepare('DELETE FROM tasks WHERE id = ?');
-    const info = stmt.run(id);
+    const result = await sql`DELETE FROM tasks WHERE id = ${id}`;
     
-    if (info.changes === 0) {
+    if (result.rowCount === 0) {
       return NextResponse.json({ error: 'Task not found' }, { status: 404 });
     }
     
