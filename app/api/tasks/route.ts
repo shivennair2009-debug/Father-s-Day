@@ -10,7 +10,7 @@ export async function GET() {
     const { rows } = await query(`SELECT * FROM tasks ORDER BY created_at DESC`);
     return NextResponse.json(rows);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch tasks' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch tasks', details: String(error) }, { status: 500 });
   }
 }
 
@@ -29,6 +29,6 @@ export async function POST(request: Request) {
     const { rows } = await query(`SELECT * FROM tasks WHERE id = $1`, [id]);
     return NextResponse.json(rows[0], { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create task' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to create task', details: String(error) }, { status: 500 });
   }
 }
