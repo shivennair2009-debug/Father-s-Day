@@ -12,8 +12,8 @@ export default function CollageWelcome({ onEnter }: { onEnter: () => void }) {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-90 backdrop-blur-md">
-      <div className="max-w-5xl w-full p-8">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-start overflow-y-auto bg-black bg-opacity-90 backdrop-blur-md">
+      <div className="max-w-5xl w-full p-8 my-auto min-h-fit">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-mono text-neon tracking-widest uppercase mb-2">Novax Automator</h1>
           <p className="text-[var(--color-text-faded)] font-sans tracking-wide">SYSTEM INITIALIZATION SEQUENCE</p>
