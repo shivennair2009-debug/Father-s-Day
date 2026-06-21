@@ -44,9 +44,6 @@ export default function Navigation() {
               ONLINE
             </span>
           </div>
-          <span className="font-mono font-bold text-sm text-black bg-white px-3 py-1 border-2 border-black shadow-[2px_2px_0_0_#000]">
-            {time}
-          </span>
         </div>
       </div>
     </nav>
