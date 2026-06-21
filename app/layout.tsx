@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space' });
 const jetbrains = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains' });
 
 export const metadata: Metadata = {
-  title: 'Novax Automator',
-  description: 'Ultra-minimalist task manager',
+  title: "Dad's Dashboard",
+  description: 'Neo-Brutalist Task Manager',
 };
 
 export default function RootLayout({
@@ -16,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
-      <body className="antialiased min-h-screen text-[var(--color-text-header)]">
+    <html lang="en" className={`${spaceGrotesk.variable} ${jetbrains.variable}`}>
+      <body className="antialiased min-h-screen text-[var(--color-text-header)] font-sans">
         {children}
       </body>
     </html>

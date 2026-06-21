@@ -6,8 +6,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const { id } = await params;
     const { status } = await request.json();
     
-    const stmt = db.prepare('UPDATE tasks SET status = ? WHERE id = ?');
-    const info = stmt.run(status, id);
+    const completedAt = status === 'COMPLETED' ? new Date().toISOString() : null;
+    const stmt = db.prepare('UPDATE tasks SET status = ?, completed_at = ? WHERE id = ?');
+    const info = stmt.run(status, completedAt, id);
     
     if (info.changes === 0) {
       return NextResponse.json({ error: 'Task not found' }, { status: 404 });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Check, Clock, Plus, Search, Trash2 } from "lucide-react";
+import { Check, Search, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export type Task = {
@@ -11,6 +11,7 @@ export type Task = {
   category: string;
   status: "PENDING" | "COMPLETED";
   created_at: string;
+  completed_at?: string;
 };
 
 export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metrics: { total: number; completed: number; pending: number }) => void }) {
@@ -80,106 +81,90 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
   const filteredTasks = tasks.filter(t => t.title.toLowerCase().includes(filter.toLowerCase()));
 
   const priorityColors = {
-    HIGH: "bg-[var(--color-priority-high)]",
-    MED: "bg-[var(--color-priority-med)]",
-    LOW: "bg-[var(--color-priority-low)]"
+    HIGH: "bg-[#ff499e]",
+    MED: "bg-[#fcd53f]",
+    LOW: "bg-[#2fe6de]"
   };
 
   return (
     <div className="w-full">
       {/* Controls */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <div className="relative flex-grow glass-panel flex items-center px-4 py-2">
-          <Search size={16} className="text-[var(--color-text-faded)] mr-3" />
+      <div className="flex flex-col lg:flex-row gap-4 mb-8">
+        <div className="relative flex-grow neo-input flex items-center px-4 py-3">
+          <Search size={20} className="text-black mr-3" strokeWidth={3} />
           <input
             type="text"
             placeholder="SEARCH TASKS..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="bg-transparent border-none outline-none w-full text-[var(--color-text-header)] font-mono text-sm placeholder:text-[#444]"
+            className="bg-transparent border-none outline-none w-full text-black font-bold placeholder:text-gray-500"
           />
         </div>
         
-        <form onSubmit={addTask} className="flex gap-2">
+        <form onSubmit={addTask} className="flex flex-col sm:flex-row gap-4">
           <select 
             value={newTaskPriority} 
             onChange={(e) => setNewTaskPriority(e.target.value as any)}
-            className="glass-panel px-4 py-2 bg-transparent text-[var(--color-text-header)] font-mono text-sm outline-none cursor-pointer"
+            className="neo-input px-4 py-3 bg-white text-black font-bold outline-none cursor-pointer"
           >
-            <option value="LOW" className="bg-black text-[#0088ff]">LOW</option>
-            <option value="MED" className="bg-black text-[#aaaaaa]">MED</option>
-            <option value="HIGH" className="bg-black text-[#ff3333]">HIGH</option>
+            <option value="LOW">LOW PRIORITY</option>
+            <option value="MED">MED PRIORITY</option>
+            <option value="HIGH">HIGH PRIORITY</option>
           </select>
           <input
             type="text"
             placeholder="NEW TASK..."
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
-            className="glass-panel px-4 py-2 bg-transparent text-[var(--color-text-header)] font-mono text-sm outline-none placeholder:text-[#444] w-64"
+            className="neo-input px-4 py-3 bg-white text-black font-bold outline-none placeholder:text-gray-500 sm:w-64"
           />
-          <button type="submit" className="glass-panel px-4 py-2 hover:glass-panel-active text-neon transition-colors flex items-center justify-center">
-            <Plus size={18} />
+          <button type="submit" className="neo-button px-6 py-3 flex items-center justify-center">
+            ADD TASK
           </button>
         </form>
       </div>
 
       {/* Grid */}
-      <div className="flex flex-col space-y-2">
-        <div className="grid grid-cols-[auto_1fr_auto_auto] gap-4 px-4 py-2 border-b border-[var(--color-border-thin)] text-[10px] font-mono text-[var(--color-text-faded)] tracking-widest uppercase">
-          <div className="w-8">STAT</div>
-          <div>TASK</div>
-          <div className="w-24 text-center">PRIORITY</div>
-          <div className="w-12 text-center">ACTION</div>
-        </div>
-
+      <div className="flex flex-col space-y-4">
         <AnimatePresence>
           {filteredTasks.map(task => (
             <motion.div
               key={task.id}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-              className="group glass-panel relative overflow-hidden"
+              className="neo-panel relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center p-4 gap-4"
             >
-              {/* Priority Indicator Line */}
-              <div className={`absolute left-0 top-0 bottom-0 w-1 ${priorityColors[task.priority]}`} />
-              
-              <div className="grid grid-cols-[auto_1fr_auto_auto] gap-4 items-center px-4 py-3 ml-2">
-                {/* Status Toggle */}
-                <button 
-                  onClick={() => toggleStatus(task.id, task.status)}
-                  className={`w-6 h-6 border border-[var(--color-border-thin)] flex items-center justify-center transition-colors ${task.status === 'COMPLETED' ? 'bg-[#111] text-neon border-neon/50' : 'hover:bg-[#111]'}`}
-                >
-                  {task.status === 'COMPLETED' ? <Check size={12} /> : <Clock size={12} className="opacity-30" />}
-                </button>
+              <button 
+                onClick={() => toggleStatus(task.id, task.status)}
+                className={`w-10 h-10 border-3 border-black flex-shrink-0 flex items-center justify-center shadow-[2px_2px_0_0_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all ${task.status === 'COMPLETED' ? 'bg-[#9b51e0] text-white' : 'bg-white hover:bg-gray-100'}`}
+              >
+                {task.status === 'COMPLETED' && <Check size={24} strokeWidth={4} />}
+              </button>
 
-                {/* Title */}
-                <span className={`font-sans text-sm tracking-wide transition-all ${task.status === 'COMPLETED' ? 'text-[var(--color-text-faded)] line-through' : 'text-[var(--color-text-header)]'}`}>
+              <div className="flex-grow">
+                <span className={`font-bold text-lg ${task.status === 'COMPLETED' ? 'text-gray-500 line-through' : 'text-black'}`}>
                   {task.title}
                 </span>
-
-                {/* Priority */}
-                <div className="w-24 text-center">
-                  <span className="font-mono text-[10px] tracking-widest text-[var(--color-text-faded)]">
-                    {task.priority}
-                  </span>
-                </div>
-
-                {/* Delete */}
-                <div className="w-12 text-center flex justify-center">
-                  <button 
-                    onClick={() => deleteTask(task.id)}
-                    className="opacity-0 group-hover:opacity-100 text-[var(--color-text-faded)] hover:text-red-500 transition-all"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
               </div>
+
+              <div className={`px-3 py-1 border-2 border-black font-bold text-xs shadow-[2px_2px_0_0_#000] ${priorityColors[task.priority]}`}>
+                {task.priority}
+              </div>
+
+              <button 
+                onClick={() => deleteTask(task.id)}
+                className="p-2 border-2 border-black bg-white shadow-[2px_2px_0_0_#000] hover:bg-[#ff499e] hover:text-white transition-colors active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+              >
+                <Trash2 size={20} strokeWidth={2.5} />
+              </button>
             </motion.div>
           ))}
           {filteredTasks.length === 0 && (
-            <div className="text-center py-12 text-[var(--color-text-faded)] font-mono text-sm tracking-widest">
-              [ NO TASKS FOUND. TAKE A BREAK, DAD! ]
+            <div className="neo-panel text-center py-12 bg-white">
+              <span className="font-bold text-xl uppercase tracking-widest text-black">
+                [ NO TASKS FOUND. TAKE A BREAK, DAD! ]
+              </span>
             </div>
           )}
         </AnimatePresence>

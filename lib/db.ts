@@ -12,8 +12,15 @@ db.exec(`
     priority TEXT CHECK( priority IN ('LOW', 'MED', 'HIGH') ) NOT NULL,
     category TEXT,
     status TEXT CHECK( status IN ('PENDING', 'COMPLETED') ) NOT NULL DEFAULT 'PENDING',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    completed_at DATETIME
   )
 `);
+
+try {
+  db.exec('ALTER TABLE tasks ADD COLUMN completed_at DATETIME');
+} catch (e) {
+  // Ignore if column already exists
+}
 
 export default db;

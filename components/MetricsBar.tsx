@@ -10,24 +10,23 @@ export default function MetricsBar({ total, completed, pending }: MetricsBarProp
   const efficiency = total === 0 ? 0 : Math.round((completed / total) * 100);
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      <div className="glass-panel p-4 flex flex-col justify-between">
-        <span className="font-mono text-[10px] text-[var(--color-text-faded)] uppercase tracking-widest mb-2">Pending Tasks</span>
-        <span className="font-sans text-3xl text-[var(--color-text-header)] font-light">{pending}</span>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+      <div className="neo-panel bg-[#2fe6de] p-5 flex flex-col justify-between">
+        <span className="font-bold text-black uppercase tracking-tight mb-2">Pending Tasks</span>
+        <span className="font-sans font-black text-5xl text-black">{pending}</span>
       </div>
       
-      <div className="glass-panel p-4 flex flex-col justify-between">
-        <span className="font-mono text-[10px] text-[var(--color-text-faded)] uppercase tracking-widest mb-2">Efficiency</span>
+      <div className="neo-panel bg-[#ff499e] p-5 flex flex-col justify-between">
+        <span className="font-bold text-black uppercase tracking-tight mb-2">Efficiency</span>
         <div className="flex items-end space-x-2">
-          <span className="font-sans text-3xl text-neon font-light">{efficiency}%</span>
+          <span className="font-sans font-black text-5xl text-black">{efficiency}%</span>
         </div>
       </div>
 
-      <div className="glass-panel p-4 flex flex-col justify-between md:col-span-2">
-        <span className="font-mono text-[10px] text-[var(--color-text-faded)] uppercase tracking-widest mb-2">Task Progress</span>
-        <div className="w-full h-2 bg-[#111] mt-auto flex overflow-hidden">
-          <div className="bg-[var(--color-priority-high)] transition-all duration-500" style={{ width: `${total ? (completed / total) * 100 : 0}%` }} />
-          <div className="bg-[#222] flex-grow transition-all duration-500" />
+      <div className="neo-panel bg-white p-5 flex flex-col justify-between md:col-span-2">
+        <span className="font-bold text-black uppercase tracking-tight mb-4">Task Progress</span>
+        <div className="w-full h-6 bg-gray-200 border-2 border-black mt-auto flex overflow-hidden">
+          <div className="bg-[#fcd53f] border-r-2 border-black transition-all duration-500" style={{ width: `${total ? (completed / total) * 100 : 0}%` }} />
         </div>
       </div>
     </div>
