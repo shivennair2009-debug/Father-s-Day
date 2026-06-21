@@ -12,7 +12,7 @@ export default function MetricsBar({ total, completed, pending }: MetricsBarProp
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <div className="glass-panel p-4 flex flex-col justify-between">
-        <span className="font-mono text-[10px] text-[var(--color-text-faded)] uppercase tracking-widest mb-2">Active Nodes</span>
+        <span className="font-mono text-[10px] text-[var(--color-text-faded)] uppercase tracking-widest mb-2">Pending Tasks</span>
         <span className="font-sans text-3xl text-[var(--color-text-header)] font-light">{pending}</span>
       </div>
       
@@ -24,7 +24,7 @@ export default function MetricsBar({ total, completed, pending }: MetricsBarProp
       </div>
 
       <div className="glass-panel p-4 flex flex-col justify-between md:col-span-2">
-        <span className="font-mono text-[10px] text-[var(--color-text-faded)] uppercase tracking-widest mb-2">System Load Distribution</span>
+        <span className="font-mono text-[10px] text-[var(--color-text-faded)] uppercase tracking-widest mb-2">Task Progress</span>
         <div className="w-full h-2 bg-[#111] mt-auto flex overflow-hidden">
           <div className="bg-[var(--color-priority-high)] transition-all duration-500" style={{ width: `${total ? (completed / total) * 100 : 0}%` }} />
           <div className="bg-[#222] flex-grow transition-all duration-500" />

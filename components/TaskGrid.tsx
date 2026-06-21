@@ -93,7 +93,7 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
           <Search size={16} className="text-[var(--color-text-faded)] mr-3" />
           <input
             type="text"
-            placeholder="FILTER NODES..."
+            placeholder="SEARCH TASKS..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className="bg-transparent border-none outline-none w-full text-[var(--color-text-header)] font-mono text-sm placeholder:text-[#444]"
@@ -112,7 +112,7 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
           </select>
           <input
             type="text"
-            placeholder="NEW TASK PAYLOAD..."
+            placeholder="NEW TASK..."
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
             className="glass-panel px-4 py-2 bg-transparent text-[var(--color-text-header)] font-mono text-sm outline-none placeholder:text-[#444] w-64"
@@ -127,9 +127,9 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
       <div className="flex flex-col space-y-2">
         <div className="grid grid-cols-[auto_1fr_auto_auto] gap-4 px-4 py-2 border-b border-[var(--color-border-thin)] text-[10px] font-mono text-[var(--color-text-faded)] tracking-widest uppercase">
           <div className="w-8">STAT</div>
-          <div>PAYLOAD</div>
+          <div>TASK</div>
           <div className="w-24 text-center">PRIORITY</div>
-          <div className="w-12 text-center">CMD</div>
+          <div className="w-12 text-center">ACTION</div>
         </div>
 
         <AnimatePresence>
@@ -179,7 +179,7 @@ export default function TaskGrid({ onMetricsChange }: { onMetricsChange: (metric
           ))}
           {filteredTasks.length === 0 && (
             <div className="text-center py-12 text-[var(--color-text-faded)] font-mono text-sm tracking-widest">
-              [ NO NODES FOUND ]
+              [ NO TASKS FOUND. TAKE A BREAK, DAD! ]
             </div>
           )}
         </AnimatePresence>

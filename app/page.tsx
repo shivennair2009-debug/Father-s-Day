@@ -21,8 +21,8 @@ export default function Home() {
         
         <div className="flex-1 max-w-7xl mx-auto w-full px-6 py-8">
           <div className="mb-10">
-            <h2 className="text-2xl font-mono text-neon tracking-widest uppercase mb-1">Command Center</h2>
-            <p className="text-[var(--color-text-faded)] font-sans text-sm tracking-wide">AUTOMATION QUEUE & TASK SCHEDULING</p>
+            <h2 className="text-2xl font-mono text-neon tracking-widest uppercase mb-1">Dad's Dashboard</h2>
+            <p className="text-[var(--color-text-faded)] font-sans text-sm tracking-wide">YOUR PERSONAL TASK MANAGER</p>
           </div>
 
           <MetricsBar {...metrics} />

@@ -25,7 +25,7 @@ export default function Navigation() {
             Novax
           </span>
           <span className="font-mono text-[10px] text-[var(--color-text-faded)] bg-[#111] px-2 py-0.5 rounded-sm uppercase border border-[#222]">
-            Sys_Core_V1
+            Dad_Mode_Active
           </span>
         </div>
         
